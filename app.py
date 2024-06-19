@@ -1,24 +1,19 @@
-from flask import Flask, request, jsonify, render_template
-from collections import deque
+from flask import Flask, render_template, request, jsonify
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-
-# Store received data in a deque with a maximum length
-data_store = deque(maxlen=10)
-
-
-@app.route('/api/data', methods=['POST'])
-def receive_data():
-    data = request.json
-    usb_data = data.get('byte_data')
-    
-    print(f"Received data -  {usb_data}")
-    data_store.append({'usb_data': usb_data})
-    return jsonify({"status": "success", "data": data}), 200
+socketio = SocketIO(app)
 
 @app.route('/')
 def index():
-    return render_template('index.html', data=list(data_store))
+    return render_template('index.html')
+
+@app.route('/api/data', methods=['POST'])
+def api_data():
+    data = request.json
+    # Emit data to all connected clients
+    socketio.emit('new_data', data)
+    return jsonify(status='success'), 200
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0')
+    socketio.run(app, host='0.0.0.0', port=5000)
