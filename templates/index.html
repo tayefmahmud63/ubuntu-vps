@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usb Data</title>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>USB Device</h1>
+    <table>
+        <tr>
+            <th>Byte Data</th>
+            <th>Decimal</th>
+        </tr>
+        {% for entry in data %}
+        <tr>
+            <td>{{ entry.usb_data }}</td>
+            <td>{{ entry.decimal }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
